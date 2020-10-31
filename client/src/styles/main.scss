@@ -1,0 +1,26 @@
+//files
+@import "./vendors/reset.scss";
+@import "./global/colors.scss";
+@import "./global/fonts.scss";
+
+//variables
+$header-main-height: 6rem;
+
+//vendors
+@import ".././../node_modules/antd/dist/antd.css";
+body {
+  background: $primary-color;
+  color: $text-color-primary;
+}
+
+* {
+  font-family: $font-family-primary;
+}
+
+//components
+@import "./components//header.scss";
+
+//layout
+.main {
+  padding-top: $header-main-height;
+}

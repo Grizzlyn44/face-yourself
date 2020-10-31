@@ -1,0 +1,28 @@
+.main-navigation {
+  padding: 0 4rem;
+  height: $header-main-height;
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  nav {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+  }
+  .main-navigation__logo {
+    font-size: 1.75rem;
+  }
+  .main-navigation__links {
+    display: flex;
+  }
+  .main-navigation__link {
+    cursor: pointer;
+    color: $text-color-primary;
+    padding: 0 1rem;
+    text-decoration: none;
+  }
+}
