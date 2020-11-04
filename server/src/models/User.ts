@@ -11,9 +11,28 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
   isDeleted: {
     type: Boolean,
     required: true
+  },
+  createdAt: {
+    type: Date,
+    required: true
+  },
+  lastUpdatedAt: {
+    type: Date,
+    required: true
+  },
+  deletedAt: {
+    type: Date
   }
 });
 

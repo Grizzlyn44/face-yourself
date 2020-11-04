@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Resource from "resource/Resource";
 import { Modal, Button, Form, Input } from "antd";
 import axios from "axios/axios";
+import { useSelector, useDispatch } from "react-redux";
+import {rootReducerType} from "reducers/index";
+import {authInit} from "actions/authActions";
 
 const SIGN_IN_MODAL_KEY = "signInModal";
 const SIGN_UP_MODAL_KEY = "signUpModal";
@@ -16,6 +19,11 @@ const generateModalVisibleInitial = () => {
 };
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const authReducer = useSelector((state:rootReducerType) => state.authReducer);
+  const { authLoading } = authReducer;
+  console.log("authReducer?", authReducer);
+  
   const [isModalVisible, setIsModalVisible] = useState(() =>
     generateModalVisibleInitial()
   );
@@ -66,7 +74,7 @@ const Header = () => {
       <Form
         // initialValues={{ remember: true }}
         onFinish={() => {
-          signIn();
+          dispatch(authInit())
           console.log("onFinsifh");
         }}
         onFinishFailed={() => {
@@ -95,7 +103,7 @@ const Header = () => {
         <Button
           htmlType='submit'
           type='primary'
-          loading={signInLoading}
+          loading={authLoading}
           style={{ width: "100%" }}
         >
           <Resource locationResource='global' keyResource='signIn' />
@@ -103,13 +111,6 @@ const Header = () => {
       </Form>
     </Modal>
   );
-
-  // console.log("value", mainContext);
-  if (false) {
-    console.log("you are signed in");
-  } else {
-    console.log("you are NOT signed in");
-  }
 
   return (
     <>

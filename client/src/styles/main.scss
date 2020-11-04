@@ -24,3 +24,34 @@ body {
 .main {
   padding-top: $header-main-height;
 }
+
+.tasks {
+  width: 20rem;
+  margin: 0 auto;
+  margin-top: 5rem;
+}
+
+.task {
+  background: #1e0954;
+  color: #fff;
+  margin-bottom: .5rem;
+  border-radius: .75rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  font-size: .9rem;
+
+  .left {
+    height: 100%;
+    width: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .circle {
+      border-radius: 100%;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid;
+    }
+  }
+}
