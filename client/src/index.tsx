@@ -2,15 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "App";
 import reportWebVitals from "reportWebVitals";
-import {createStore} from "redux";
+import {createStore, applyMiddleware} from "redux";
+import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
 
 import rootReducer from "reducers/index"
 
 const store = createStore(
-  rootReducer
+  rootReducer,
+  applyMiddleware(thunkMiddleware)
   // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // for debug
-  )
+)
 
 
 ReactDOM.render(

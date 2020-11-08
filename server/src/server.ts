@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
 import signInRoute from "endpoints/signIn";
+import authCheck from "endpoints/authCheck";
 
 // dotenv file needs to be set
 config();
@@ -19,6 +20,8 @@ const CONNECT_URL = process.env.DB_CONNECT_URL || "";
 
 // app config
 const server: Application = express();
+
+// middlewares
 server.use(express.json());
 server.use(cookieParser());
 server.use(
@@ -27,8 +30,6 @@ server.use(
     credentials: true
   })
 );
-
-// middlewares
 
 // db congif
 mongoose.connect(
@@ -49,6 +50,9 @@ mongoose.connect(
 
 // api endpoints
 server.use(signInRoute);
+server.use(authCheck);
+
+// server.use(testAPI); //TEST
 
 // listener
 server.listen(PORT, () => {

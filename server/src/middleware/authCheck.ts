@@ -7,11 +7,15 @@
 //   const { headers } = req;
 //   const { authorization } = headers;
 //   try {
-//     const token = authorization.split(" ")[1]; // skip Bearer
+//     const token = authorization?.split(" ")[1] || ""; // skip Bearer string
 //     const decoded = jwt.verify(token, ENV_JWT_TOKEN);
-//     console.log("decoded", decoded);
-//     req.userData = decoded;
-//     next();
+//     res.status(200).send({
+//         message: "Auh OK",
+//         userData: decoded
+//     });
+//     // console.log("decoded", decoded);
+//     // req.userData = decoded;
+//     // next();
 //   } catch {
 //     res.status(401).send({
 //       message: "Auth failed"
@@ -19,17 +23,17 @@
 //   }
 // };
 
-// export default authCheck;
+// // export default authCheck;
 
-// app.get("/isauthed", (req, res, next) => {
-//     //checkAuth
-//     try {
-//       const token = req.cookies.access_token;
-//       const decoded = jwt.verify(token, ENV_JWT_TOKEN);
-//       res.status(200).send(decoded);
-//     } catch {
-//       res.status(401).send({
-//         message: "U need to be signed in"
-//       });
-//     }
-//   });
+// // app.get("/isauthed", (req, res, next) => {
+// //     //checkAuth
+// //     try {
+// //       const token = req.cookies.access_token;
+// //       const decoded = jwt.verify(token, ENV_JWT_TOKEN);
+// //       res.status(200).send(decoded);
+// //     } catch {
+// //       res.status(401).send({
+// //         message: "U need to be signed in"
+// //       });
+// //     }
+// //   });

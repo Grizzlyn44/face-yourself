@@ -4,7 +4,7 @@ import { Modal, Button, Form, Input } from "antd";
 import axios from "axios/axios";
 import { useSelector, useDispatch } from "react-redux";
 import {rootReducerType} from "reducers/index";
-import {authInit} from "actions/authActions";
+import {authProcessSignInAction, authProcessInitAction} from "actions/authActions";
 
 const SIGN_IN_MODAL_KEY = "signInModal";
 const SIGN_UP_MODAL_KEY = "signUpModal";
@@ -21,32 +21,24 @@ const generateModalVisibleInitial = () => {
 const Header = () => {
   const dispatch = useDispatch();
   const authReducer = useSelector((state:rootReducerType) => state.authReducer);
-  const { authLoading } = authReducer;
-  console.log("authReducer?", authReducer);
+  const { authProcessLoading } = authReducer;
   
   const [isModalVisible, setIsModalVisible] = useState(() =>
     generateModalVisibleInitial()
   );
 
   const [signInForm, setSignInFrom] = useState({ email: "", password: "" });
-  const [signInLoading, setSignInLoading] = useState(false);
 
   const signIn = async () => {
-    setSignInLoading(true);
 
-    await axios
-      .post("/signin", {
-        email: signInForm.email,
-        password: signInForm.password
-      })
-      .then(res => {
-        console.log("res", res);
-      })
-      .catch(err => {
-        console.log("error", err);
-      });
+    dispatch(authProcessInitAction());
 
-    setSignInLoading(false);
+    const formData = {
+      email: signInForm.email,
+      password: signInForm.password
+    }
+    await dispatch(authProcessSignInAction(formData));
+    modalVisibilityToggler(SIGN_IN_MODAL_KEY);
   };
 
   const signInFormOnChangeHandler = e => {
@@ -74,8 +66,7 @@ const Header = () => {
       <Form
         // initialValues={{ remember: true }}
         onFinish={() => {
-          dispatch(authInit())
-          console.log("onFinsifh");
+          signIn();
         }}
         onFinishFailed={() => {
           console.log("onFinish FAILED");
@@ -103,7 +94,7 @@ const Header = () => {
         <Button
           htmlType='submit'
           type='primary'
-          loading={authLoading}
+          loading={authProcessLoading}
           style={{ width: "100%" }}
         >
           <Resource locationResource='global' keyResource='signIn' />
@@ -112,6 +103,38 @@ const Header = () => {
     </Modal>
   );
 
+  console.log("authReducer", authReducer);
+
+  const unAuthorizedContent = (
+    <>
+      <a
+        className='main-navigation__link'
+        onClick={() => modalVisibilityToggler(SIGN_IN_MODAL_KEY)}
+      >
+        <Resource locationResource='global' keyResource='signIn' />
+      </a>
+      <a href='/' className='main-navigation__link'>
+        <Resource locationResource='global' keyResource='signUp' />
+      </a>
+    </>
+  )
+
+  const authorizedContent = (
+    <>
+      <div className="main-navigation__link">
+        {authReducer.email}
+      </div>
+    </>
+  )
+
+  const renderLinksContent = () => {
+    if(authReducer.isSignedIn) {
+      return authorizedContent
+    } else {
+      return unAuthorizedContent
+    }
+  }
+
   return (
     <>
       {signInModal}
@@ -119,15 +142,7 @@ const Header = () => {
         <nav>
           <div className='main-navigation__logo'>FU</div>
           <div className='main-navigation__links'>
-            <a
-              className='main-navigation__link'
-              onClick={() => modalVisibilityToggler(SIGN_IN_MODAL_KEY)}
-            >
-              <Resource locationResource='global' keyResource='signIn' />
-            </a>
-            <a href='/' className='main-navigation__link'>
-              <Resource locationResource='global' keyResource='signUp' />
-            </a>
+            {renderLinksContent()}
           </div>
         </nav>
       </header>

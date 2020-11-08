@@ -9,20 +9,40 @@ import {
   Redirect,
   RouteProps
 } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { rootReducerType } from "reducers/index"
-
-// const authReducer = useSelector((state:rootReducerType) => state.authReducer);
+import { useSelector, useDispatch } from "react-redux";
+import { rootReducerType } from "reducers/index";
+import { authInitAction, authLoadUserDataAction } from "actions/authActions";
+import { Button, notification } from 'antd';
 
 import LandingPage from "components/LandingPage/LandingPage"
 import Dashboard from "components/Dashboard/Dashboard"
 import Header from "components/core/Header/Header"
 
-interface x {
-  component: Component;
-}
-
 const App = () => {
+  const authReducer = useSelector((state:rootReducerType) => state.authReducer);
+  const dispatch = useDispatch();
+
+  const openNotification = (title: string, text: string) => {
+    notification.open({
+      message:  title,
+      description: text,
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+  }
+
+  const loadUserData = async () => {
+    dispatch(authInitAction());
+    await dispatch(authLoadUserDataAction());
+    const header = "Just to know..";
+    const text = "We are glad that you are using FaceYourself app. However, keep in mind that you are only using the beta version."
+    openNotification(header, text);
+  }
+
+  useEffect( () => {
+    loadUserData();
+  }, []);
 
   const PrivateRoute = (props: RouteProps) => {
     const { component: Component, ...rest } = props
@@ -30,7 +50,7 @@ const App = () => {
     const { isSignedIn } = authReducer
     const { location } = {...props}
 
-    console.log("private", isSignedIn, {...props})
+    // console.log("private", isSignedIn, {...props})
     return (
         <Route
           {...rest}
@@ -38,6 +58,16 @@ const App = () => {
         />
     );
   };
+  
+  console.log("props", authReducer);
+
+  if(authReducer.authLoading) {
+    return (
+      <div>
+        Page is loading...
+      </div>
+    )
+  }
 
   return (
     <Router>
